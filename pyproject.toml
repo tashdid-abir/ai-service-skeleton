@@ -1,0 +1,19 @@
+[project]
+name = "ai-service-skeleton"
+version = "0.1.0"
+description = "A modular AI service framework providing core configurations, schema validation, client management, and REST API utilities for building scalable AI applications."
+readme = "README.md"
+authors = [
+    { name = "Ayubur Rahman Tashdid", email = "tashdidr3@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic-settings>=2.15.0",
+]
+
+[project.scripts]
+ai-service-skeleton = "ai_service_skeleton:main"
+
+[build-system]
+requires = ["uv_build>=0.12.7,<0.13.0"]
+build-backend = "uv_build"
