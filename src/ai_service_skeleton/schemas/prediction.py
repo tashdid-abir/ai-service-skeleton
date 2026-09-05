@@ -20,6 +20,9 @@ class PredictionRequest(BaseModel):
     def normalize_text(cls, value: str) -> str:
         normalized_text = value.strip()
 
+        if normalized_text.isdigit():
+            raise ValueError("text must contain words, not only digits")
+
         if not normalized_text:
             raise ValueError("text must not be empty or whitespace only")
 
