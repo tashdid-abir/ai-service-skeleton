@@ -1,62 +1,93 @@
 # AI Service Skeleton
 
-A modular AI service framework providing core configurations, schema validation, client management, and REST API utilities for building scalable AI applications.
-
-## Features
-
-- **Core Configuration**: Centralized configuration management with environment variable support
-- **Schema Validation**: Pydantic-based schema validation for data consistency
-- **Client Management**: Extensible client infrastructure for service integration
-- **API Utilities**: REST API building blocks for rapid service development
-- **Modular Architecture**: Clean separation of concerns with independent modules
+A small, typed FastAPI service that exposes a deterministic sentiment predictor.
+It is a learning project for building a production-shaped Python AI service with
+separate API, schema, service, and configuration layers.
 
 ## Requirements
 
-Python >= 3.12
+- Python 3.12 or newer
+- [uv](https://docs.astral.sh/uv/)
 
-## Installation
+## Setup
 
-Install the package using pip:
+Clone the repository, enter the project directory, and create the locked local
+environment:
 
-```bash
-pip install ai-service-skeleton
-```
-
-## Project Structure
-
-```
-ai-service-skeleton/
-├── src/ai_service_skeleton/
-│   ├── api/              # REST API utilities
-│   ├── clients/          # Client management
-│   ├── core/             # Core configuration
-│   ├── schemas/          # Data schemas
-│   └── services/         # Service implementations
-├── tests/                # Test suite
-├── pyproject.toml        # Project metadata
-└── README.md             # This file
-```
-
-## Quick Start
-
-```python
-from ai_service_skeleton.core.config import Config
-
-# Initialize configuration
-config = Config()
-
-# Use in your application
-print(config)
-```
-
-## Development
-
-For development setup, clone the repository and install dependencies:
-
-```bash
+```powershell
 uv sync
 ```
 
-## License
+Create a local `.env` file from `.env.example` and provide the required values.
+Do not commit `.env`, because it may contain secrets.
 
-MIT License
+## Run the API
+
+Start the development server from the project root:
+
+```powershell
+uv run uvicorn ai_service_skeleton.main:app --reload
+```
+
+The API is then available at `http://127.0.0.1:8000`. Interactive OpenAPI
+documentation is available at `http://127.0.0.1:8000/docs`.
+
+## Endpoints
+
+### Health check
+
+```powershell
+Invoke-RestMethod -Method Get -Uri "http://127.0.0.1:8000/health"
+```
+
+Expected response:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+### Prediction
+
+```powershell
+Invoke-RestMethod -Method Post `
+  -Uri "http://127.0.0.1:8000/predict" `
+  -ContentType "application/json" `
+  -Body '{"text":"This product is excellent"}'
+```
+
+Example response:
+
+```json
+{
+  "label": "positive",
+  "confidence": 1.0,
+  "predictor_id": "deterministic-v1"
+}
+```
+
+`POST /predict` validates its JSON body before calling the inference service.
+Empty, whitespace-only, numeric-only, or overly long text receives a validation
+error response.
+
+## Project structure
+
+```text
+src/ai_service_skeleton/
+├── api/          HTTP route handlers
+├── core/         configuration and application exceptions
+├── schemas/      Pydantic request and response models
+├── services/     prediction contract and inference orchestration
+└── main.py       FastAPI application setup
+```
+
+## Manual API check
+
+With the server running, execute:
+
+```powershell
+uv run python check_API.py
+```
+
+This sends real HTTP requests to `/predict` and `/health`.
