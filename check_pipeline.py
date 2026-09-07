@@ -8,7 +8,8 @@ from ai_service_skeleton.schemas.prediction import PredictionRequest
 from ai_service_skeleton.services.inference import InferenceService
 from ai_service_skeleton.services.predictor import (
     DeterministicPredictor,
-    Prediction,
+    InvalidPredictor,
+    BrokenPredictor,
     Predictor,
 )
 
@@ -63,18 +64,6 @@ def main(
             f"Predictor ID: {response.predictor_id}"
         )
 
-
-class BrokenPredictor:
-    def predict(self, text: str) -> Prediction:
-        raise TimeoutError("The model took too long")
-
-
-class InvalidPredictor:
-    def predict(self, text: str) -> Prediction:
-        return Prediction(
-            label="positive",
-            confidence=1.5,
-        )
 
 
 main(

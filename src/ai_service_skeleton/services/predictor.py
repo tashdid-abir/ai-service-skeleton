@@ -58,3 +58,15 @@ class DeterministicPredictor:
             label=label,
             confidence=round(confidence, 2),
         )
+
+class BrokenPredictor:
+    def predict(self, text: str) -> Prediction:
+        raise TimeoutError("The model took too long")
+
+
+class InvalidPredictor:
+    def predict(self, text: str) -> Prediction:
+        return Prediction(
+            label="positive",
+            confidence=1.5,
+        )
