@@ -13,6 +13,11 @@ from ai_service_skeleton.services.predictor import (
     InvalidPredictor,
 )
 
+import httpx2 as httpx
+
+from ai_service_skeleton.clients.http_prediction_client import (
+    HttpPredictionClient,
+)
 
 def test_inference_service_returns_valid_response() -> None:
     service = InferenceService(
@@ -53,3 +58,29 @@ def test_inference_service_wraps_invalid_prediction_result() -> None:
 
     assert "invalid-v1" in str(exc_info.value)
     assert isinstance(exc_info.value.__cause__, ValidationError)
+
+def test_inference_service_wraps_http_client_timeout() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ReadTimeout(
+            "External prediction service timed out.",
+            request=request,
+        )
+
+    transport = httpx.MockTransport(handler)
+
+    service = InferenceService(
+        predictor=HttpPredictionClient(
+            base_url="https://prediction.example",
+            timeout_seconds=10.0,
+            transport=transport,
+        ),
+        predictor_id="http-prediction-v1",
+    )
+
+    with pytest.raises(PredictionExecutionError) as exc_info:
+        service.predict(
+            PredictionRequest(text="This product is excellent")
+        )
+
+    assert "http-prediction-v1" in str(exc_info.value)
+    assert isinstance(exc_info.value.__cause__, httpx.ReadTimeout)
