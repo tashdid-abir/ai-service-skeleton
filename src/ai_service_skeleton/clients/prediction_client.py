@@ -4,8 +4,7 @@ from ai_service_skeleton.services.predictor import Prediction
 
 
 class PredictionClient(Protocol):
-    def predict(self, text: str) -> Prediction:
-        ...
+    def predict(self, text: str) -> Prediction: ...
 
 
 class FakePredictionClient:
@@ -14,6 +13,7 @@ class FakePredictionClient:
             label="neutral",
             confidence=0.5,
         )
+
 
 class FailingPredictionClient:
     def predict(self, text: str) -> Prediction:

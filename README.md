@@ -26,7 +26,7 @@ Do not commit `.env`, because it may contain secrets.
 Start the development server from the project root:
 
 ```powershell
-uv run uvicorn ai_service_skeleton.main:app --reload
+uv run ai-service-skeleton
 ```
 
 The API is then available at `http://127.0.0.1:8000`. Interactive OpenAPI
@@ -81,13 +81,3 @@ src/ai_service_skeleton/
 ├── services/     prediction contract and inference orchestration
 └── main.py       FastAPI application setup
 ```
-
-## Manual API check
-
-With the server running, execute:
-
-```powershell
-uv run python check_API.py
-```
-
-This sends real HTTP requests to `/predict` and `/health`.

@@ -1,6 +1,10 @@
+import httpx2 as httpx
 import pytest
 from pydantic import ValidationError
 
+from ai_service_skeleton.clients.http_prediction_client import (
+    HttpPredictionClient,
+)
 from ai_service_skeleton.core.exception import (
     InvalidPredictionResultError,
     PredictionExecutionError,
@@ -13,11 +17,6 @@ from ai_service_skeleton.services.predictor import (
     InvalidPredictor,
 )
 
-import httpx2 as httpx
-
-from ai_service_skeleton.clients.http_prediction_client import (
-    HttpPredictionClient,
-)
 
 def test_inference_service_returns_valid_response() -> None:
     service = InferenceService(
@@ -25,9 +24,7 @@ def test_inference_service_returns_valid_response() -> None:
         predictor_id="deterministic-v1",
     )
 
-    response = service.predict(
-        PredictionRequest(text="This product is excellent")
-    )
+    response = service.predict(PredictionRequest(text="This product is excellent"))
 
     assert response.label == "positive"
     assert response.confidence == 1.0
@@ -59,6 +56,7 @@ def test_inference_service_wraps_invalid_prediction_result() -> None:
     assert "invalid-v1" in str(exc_info.value)
     assert isinstance(exc_info.value.__cause__, ValidationError)
 
+
 def test_inference_service_wraps_http_client_timeout() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         raise httpx.ReadTimeout(
@@ -78,9 +76,7 @@ def test_inference_service_wraps_http_client_timeout() -> None:
     )
 
     with pytest.raises(PredictionExecutionError) as exc_info:
-        service.predict(
-            PredictionRequest(text="This product is excellent")
-        )
+        service.predict(PredictionRequest(text="This product is excellent"))
 
     assert "http-prediction-v1" in str(exc_info.value)
     assert isinstance(exc_info.value.__cause__, httpx.ReadTimeout)

@@ -68,4 +68,4 @@ def test_prediction_response_rejects_invalid_data(
     test_response_data: dict[str, str | float],
 ) -> None:
     with pytest.raises(ValidationError):
-        PredictionResponse(**test_response_data)
+        PredictionResponse.model_validate(test_response_data)

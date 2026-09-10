@@ -1,6 +1,7 @@
 import json
-import pytest
+
 import httpx2 as httpx
+import pytest
 
 from ai_service_skeleton.clients.http_prediction_client import (
     HttpPredictionClient,

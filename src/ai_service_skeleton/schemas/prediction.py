@@ -2,8 +2,8 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
-
 PredictionLabel = Literal["positive", "negative", "neutral"]
+
 
 class PredictionRequest(BaseModel):
     text: Annotated[
@@ -27,6 +27,7 @@ class PredictionRequest(BaseModel):
             raise ValueError("text must not be empty or whitespace only")
 
         return normalized_text
+
 
 class PredictionResponse(BaseModel):
     label: PredictionLabel

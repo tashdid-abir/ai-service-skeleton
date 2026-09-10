@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from ai-service-skeleton!")
+"""AI Service Skeleton package."""

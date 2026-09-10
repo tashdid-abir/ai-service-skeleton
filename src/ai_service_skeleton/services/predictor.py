@@ -9,9 +9,10 @@ class Prediction:
     label: PredictionLabel
     confidence: float
 
+
 class Predictor(Protocol):
-    def predict(self, text: str) -> Prediction:
-        ...
+    def predict(self, text: str) -> Prediction: ...
+
 
 class DeterministicPredictor:
     positive_words = {
@@ -31,10 +32,7 @@ class DeterministicPredictor:
     }
 
     def predict(self, text: str) -> Prediction:
-        words = {
-            word.strip(".,!?;:")
-            for word in text.lower().split()
-        }
+        words = {word.strip(".,!?;:") for word in text.lower().split()}
 
         positive_score = len(words & self.positive_words)
         negative_score = len(words & self.negative_words)
@@ -58,6 +56,7 @@ class DeterministicPredictor:
             label=label,
             confidence=round(confidence, 2),
         )
+
 
 class BrokenPredictor:
     def predict(self, text: str) -> Prediction:

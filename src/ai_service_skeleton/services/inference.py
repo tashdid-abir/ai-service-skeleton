@@ -4,12 +4,10 @@ from ai_service_skeleton.core.exception import (
     InvalidPredictionResultError,
     PredictionExecutionError,
 )
-
 from ai_service_skeleton.schemas.prediction import (
     PredictionRequest,
     PredictionResponse,
 )
-
 from ai_service_skeleton.services.predictor import Predictor
 
 
@@ -23,7 +21,7 @@ class InferenceService:
         self._predictor_id = predictor_id
 
     def predict(self, request: PredictionRequest) -> PredictionResponse:
-        
+
         try:
             prediction = self._predictor.predict(request.text)
         except Exception as exc:
