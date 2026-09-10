@@ -23,7 +23,7 @@ Do not commit `.env`, because it may contain secrets.
 
 ## Run the API
 
-Start the development server from the project root:
+Start the API from the project root:
 
 ```powershell
 uv run ai-service-skeleton
@@ -71,13 +71,26 @@ Example response:
 Empty, whitespace-only, numeric-only, or overly long text receives a validation
 error response.
 
+The default deterministic provider runs without an external prediction service.
+The HTTP provider is prepared for a future external model endpoint.
+
 ## Project structure
 
 ```text
 src/ai_service_skeleton/
 ├── api/          HTTP route handlers
+├── clients/      External HTTP/client adapters
 ├── core/         configuration and application exceptions
 ├── schemas/      Pydantic request and response models
 ├── services/     prediction contract and inference orchestration
 └── main.py       FastAPI application setup
+tests/            Automated test suite
+```
+
+## Quality checks
+
+Run all configured local quality checks with:
+
+```powershell
+uv run python -m pre_commit run --all-files
 ```
