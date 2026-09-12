@@ -11,15 +11,29 @@ separate API, schema, service, and configuration layers.
 
 ## Setup
 
-Clone the repository, enter the project directory, and create the locked local
-environment:
+Clone the repository and enter the project directory. On this Windows machine,
+create the project environment with Python's standard-library `venv` module
+before synchronizing dependencies. Windows Application Control blocks the
+interpreter produced by `uv venv` here.
 
 ```powershell
-uv sync
+$py = uv python find --no-project --managed-python 3.12
+& $py -m venv .venv
+.\.venv\Scripts\python.exe --version
+uv sync --locked
 ```
 
 Create a local `.env` file from `.env.example` and provide the required values.
 Do not commit `.env`, because it may contain secrets.
+
+The project configures uv to copy packages into `.venv` rather than using its
+default Windows hardlinks. This avoids OneDrive's incompatible-hardlink error.
+
+### Repairing a blocked existing environment
+
+If `.venv\Scripts\python.exe --version` reports that Windows Application
+Control blocked the file, remove or rename only the disposable `.venv` folder,
+then repeat the setup commands above. Do not use `uv venv` for this project.
 
 ## Run the API
 

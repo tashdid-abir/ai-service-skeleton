@@ -30,6 +30,10 @@ dev = [
     "ruff>=0.16.6",
 ]
 
+[tool.uv]
+# OneDrive rejects uv's default Windows hardlinks. Copying packages is reliable
+# here and keeps the project environment independent of uv's cache.
+link-mode = "copy"
 
 [tool.ruff]
 line-length = 150
